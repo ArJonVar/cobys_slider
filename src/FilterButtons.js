@@ -18,10 +18,18 @@ const FilterButtons = (props) => {
     }
 
     const handleFilterClick = ({filterKey, filterValue}) => {
-      console.log('onclick')
+      console.log('onclick')     
+      // if filter object does not have specific filter key, add key/value where value is the specific sub filter clicked
       if(!filterState.hasOwnProperty(filterKey)){
         setFilter({...filterState, [filterKey]: [filterValue]})
       }
+      // if filter object has a specific filter key, and already has specific filter value, remove value from array (by making a copy without it and replace it)
+      else if(filterState[filterKey].includes(filterValue)){
+        const updatedState = {...filterState}; // create a new copy of the object
+        const index = updatedState[filterKey].indexOf(filterValue)
+        updatedState[filterKey].splice(index, 1)
+        setFilter(updatedState)    } 
+      //if filter object has key, but not value, add value to array
       else {
         const updatedState = {...filterState}; // create a new copy of the object
         updatedState[filterKey].push(filterValue); // update the array in the copied object
