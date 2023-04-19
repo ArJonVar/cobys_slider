@@ -18,7 +18,7 @@ const FilterButtons = (props) => {
     }
 
     const handleFilterClick = ({filterKey, filterValue}) => {
-      console.log('onclick')     
+      console.log('onclick', filterState.hasOwnProperty(filterKey), filterState[filterKey].includes(filterValue))     
       // if filter object does not have specific filter key, add key/value where value is the specific sub filter clicked
       if(!filterState.hasOwnProperty(filterKey)){
         setFilter({...filterState, [filterKey]: [filterValue]})
@@ -42,22 +42,25 @@ const FilterButtons = (props) => {
       setFilter({...filterState, [filterKey]: []})
     }
 
-    function RadioOptions({buttonTitle}) {
-        const valueArray = getUniqueValuesForKey(data, buttonTitle)
+    function RadioOptions({filterKey}) {
+        const valueArray = getUniqueValuesForKey(data, filterKey)
         const resetIndex = valueArray.length + 1
-        // console.log(buttonTitle)
+        // console.log(filterKey)
         return (
-          <div key={`outerdiv ${buttonTitle}`}>
-            {valueArray.map((option, index) => (
+          <div key={`outerdiv ${filterKey}`}>
+            {valueArray.map((filterValue, index) => (
               <div key={`innerdiv ${index}`}>
-                <input type="radio" onClick={() => handleFilterClick({filterKey: buttonTitle, filterValue: option})}
-                    name="option" key={`input ${index}`} value={option} />
-                <label className = 'option' key={`label ${index}`}>{option}</label>
+                <input type="checkbox" 
+                  checked = {filterState.hasOwnProperty(filterKey) ? filterState[filterKey].includes(filterValue) : false}
+                  onChange= {() => handleFilterClick({filterKey: filterKey, filterValue: filterValue})}
+                  name="option" 
+                  key={`input ${index}`} 
+                  value={filterValue} />
+                <label className = 'option' key={`label ${index}`}>{filterValue}</label>
               </div>
             ))}
-            <input type="radio" onClick={() => handleFilterReset({filterKey: buttonTitle})}
-              name="option" key={`input ${resetIndex}`} value='reset' />
-            <label className = 'option' key={`label ${resetIndex}`}>RESET</label>
+            <button onClick={() => handleFilterReset({filterKey: filterKey})}
+              name="option" key={`input ${resetIndex}`} value='reset'>RESET</button>
           </div>
         );
       }
@@ -68,7 +71,7 @@ const FilterButtons = (props) => {
         {keys.map((key, index) => (
           <div key={`filter ${key}, ${index}`} className= 'filter'>
             <label className='radioTitle' key={index}>{key}</label>
-            <RadioOptions buttonTitle = {key} />
+            <RadioOptions filterKey = {key} />
           </div>
         ))}
       </div>
