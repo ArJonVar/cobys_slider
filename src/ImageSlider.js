@@ -4,6 +4,7 @@ import FilterButtons from "./FilterButtons";
 
 const ImageSlider = ({slides}) => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [filter, setFilter] = useState({});
 
     const goToPrevious = () => {
         const isFirstSlide = currentIndex === 0;
@@ -36,9 +37,10 @@ const ImageSlider = ({slides}) => {
                     <div key={slideIndex} className='dot' onClick={() => goToSlide(slideIndex)}>●</div>
                 ))}
             </div>
+        <h3>Filters: {JSON.stringify(filter)}</h3>
         <h1>Filters</h1>
         <div className ='filterContainer'>
-            <FilterButtons data={slides}/>
+            <FilterButtons data={slides} setFilter={setFilter} filter={filter}/>
         </div>
         </div>
     )

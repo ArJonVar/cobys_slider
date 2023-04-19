@@ -1,10 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import './FilterButtons.css';
 
-const FilterButtons = ({data}) => {
+const FilterButtons = (props) => {
+    const data = props.data
+    const setFilter = props.setFilter
+    const filter = props.filter
+
     const firstItem = data[0]
     const keys = Object.keys(firstItem);
-    // console.log(keys)
 
     function getUniqueValuesForKey(data, keyName) {
       const values = new Set();
@@ -16,26 +19,27 @@ const FilterButtons = ({data}) => {
 
     function RadioOptions({buttonTitle}) {
         const valueArray = getUniqueValuesForKey(data, buttonTitle)
-        console.log('rb', buttonTitle, 'options', valueArray)
+        // console.log('rb', buttonTitle, 'options', valueArray)
+        console.log(buttonTitle)
         return (
-          <div>
+          <div key={`outerdiv ${buttonTitle}`}>
             {valueArray.map((option, index) => (
-              <div>
-                <input type="radio" name="option" value={option} />
-                <label className = 'option' key={index}>{option}</label>
+              <div key={`innerdiv ${index}`}>
+                <input type="radio" onClick={() => setFilter({...filter, [buttonTitle]: option})}
+                    name="option" key={`input ${index}`} value={option} />
+                <label className = 'option' key={`label ${index}`}>{option}</label>
               </div>
             ))}
           </div>
         );
       }
 
-    console.log(getUniqueValuesForKey(data, 'filter'))
-
+    console.log(filter)
     return (
       <div className = 'filterContainer'>
-        {keys.map(key => (
-          <div className= 'filter'>
-            <div className='radioTitle' key={key}>{key}</div>
+        {keys.map((key, index) => (
+          <div key={`filter ${key}, ${index}`} className= 'filter'>
+            <div className='radioTitle' key={index}>{key}</div>
             <RadioOptions buttonTitle = {key} />
           </div>
         ))}
