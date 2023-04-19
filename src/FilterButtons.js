@@ -18,7 +18,6 @@ const FilterButtons = (props) => {
     }
 
     const handleFilterClick = ({filterKey, filterValue}) => {
-      console.log('onclick', filterState.hasOwnProperty(filterKey), filterState[filterKey].includes(filterValue))     
       // if filter object does not have specific filter key, add key/value where value is the specific sub filter clicked
       if(!filterState.hasOwnProperty(filterKey)){
         setFilter({...filterState, [filterKey]: [filterValue]})
