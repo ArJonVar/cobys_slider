@@ -41,14 +41,39 @@ const FilterButtons = (props) => {
       setFilter({...filterState, [filterKey]: []})
     }
 
+    // useful when value is a list, this turns into a list of list when we pick up all values of one key
+    function flattenArray(arrays) {
+      const flattened = arrays.reduce((accumulator, currentValue) => {
+        return [...accumulator, ...currentValue];
+      }, []);
+      return [...new Set(flattened)];
+    }
+
+    // for putting the filter options in alphabetical order
+    function sortArray(list) {
+      const alphaSorted = list.sort();
+      const numSorted = alphaSorted.sort((a, b) => {
+        if (isNaN(a) || isNaN(b)) {
+          return 0;
+        }
+        return a - b;
+      });
+      return numSorted;
+    }
+
+
     function RadioOptions({filterKey}) {
-        const valueArray = getUniqueValuesForKey(data, filterKey)
+        let valueArray = getUniqueValuesForKey(data, filterKey)
+        let sortedArray = sortArray(valueArray)
+        if(Array.isArray(valueArray[0])) {
+          valueArray = flattenArray(valueArray)
+          sortedArray = sortArray(valueArray)
+        }
         const resetIndex = valueArray.length + 1
-        // console.log(filterKey)
         return (
           <div key={`outerdiv ${filterKey}`}>
-            {valueArray.map((filterValue, index) => (
-              <div key={`innerdiv ${index}`}>
+            {sortedArray.map((filterValue, index) => (
+              <div key={`nonarray innerdiv ${index}`}>
                 <input type="checkbox" 
                   checked = {filterState.hasOwnProperty(filterKey) ? filterState[filterKey].includes(filterValue) : false}
                   onChange= {() => handleFilterClick({filterKey: filterKey, filterValue: filterValue})}
@@ -63,8 +88,6 @@ const FilterButtons = (props) => {
           </div>
         );
       }
-
-    console.log(filterState)
     return (
       <div className = 'filterContainer'>
         {keys.map((key, index) => (
