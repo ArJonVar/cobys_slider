@@ -4,10 +4,10 @@ import FilterButtons from "./FilterButtons";
 
 const ImageSlider = ({slides}) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [filter, setFilter] = useState({});
+    const [filterState, setFilterState] = useState({});
     const [filteredSlides, setFilteredSlides] = useState(slides)
 
-    function filterSlides(slides, filterObj) {
+    function filterSlidesOr(slides, filterObj) {
         const filtered = [];
         //if the filter object is totally blank, a filter was never set, just return all slides
         if (Object.keys(filterObj).length === 0) {
@@ -35,16 +35,39 @@ const ImageSlider = ({slides}) => {
         return filtered;
     }
 
+    function filterSlidesAnd(slides, filterObj) {
+        const filteredSlides = slides.filter(slide => {
+            //if the filter object is totally blank, a filter was never set, just return all slides
+            if (Object.keys(filterObj).length === 0) {
+                // console.log("never set filter")
+                return slides
+            }
+            for (const key in filterObj) {
+              if (Array.isArray(slide[key])) {
+                if (filterObj[key].length > 0) {
+                  const filteredArray = slide[key].filter(item => filterObj[key].includes(item));
+                  if (filteredArray.length === 0) {
+                    return false;
+                  }
+                }
+              } else if (filterObj[key].length > 0 && slide[key] !== filterObj[key][0]) {
+                return false;
+              }
+            }
+            return true;
+          });
+          return filteredSlides;
+        }
     // useEffect makes sure to rerender components correctly after a render, specificially, it makes sure to reset the index to zero when ever the filter changes
     // (so if you were on index 5 but your filtered list now is an array of length 3 it doesnt error out)
     useEffect(() => {
-        const filteredSlides = filterSlides(slides, filter);
+        const filteredSlides = filterSlidesAnd(slides, filterState);
         setFilteredSlides(filteredSlides);
         if (currentIndex >= filteredSlides.length){
             console.log("index reset")
             setCurrentIndex(0); // add setCurrentIndex to dependency array
         }
-    }, [slides, filter, setCurrentIndex, currentIndex]);
+    }, [slides, filterState, setCurrentIndex, currentIndex]);
 
     const goToPrevious = () => {
         const isFirstSlide = currentIndex === 0;
@@ -77,11 +100,12 @@ const ImageSlider = ({slides}) => {
                         <div key={slideIndex} className='dot' onClick={() => goToSlide(slideIndex)}>●</div>
                     ))}
                 </div>
-            <h3>Filters: {JSON.stringify(filter)}</h3>
-            <h2>Filters: {filteredSlides.length}</h2>
+            <h5>image metadata: {JSON.stringify(filteredSlides[currentIndex])}</h5>
+            <h5>Filters: {JSON.stringify(filterState)}</h5>
+            <h5>Filters: {filteredSlides.length}</h5>
             <h1>Filters</h1>
             <div className ='filterContainer'>
-                <FilterButtons data={slides} setFilter={setFilter} filter={filter}/>
+                <FilterButtons data={slides} setFilter={setFilterState} filter={filterState}/>
             </div>
         </div>
     )
