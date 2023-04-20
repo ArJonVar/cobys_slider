@@ -7,34 +7,6 @@ const ImageSlider = ({slides}) => {
     const [filterState, setFilterState] = useState({});
     const [filteredSlides, setFilteredSlides] = useState(slides)
 
-    function filterSlidesOr(slides, filterObj) {
-        const filtered = [];
-        //if the filter object is totally blank, a filter was never set, just return all slides
-        if (Object.keys(filterObj).length === 0) {
-            // console.log("never set filter")
-            return slides
-        }
-        for (const data_index in slides) {
-            for (const data_key in filterObj){
-                // if there is no filter (because filter options are blank in all places, just return all slides)
-                if (Object.values(filterObj).every(value => Array.isArray(value) && value.length === 0)) {
-                    // console.log("no filter")
-                    return slides
-                }
-                // if there is a filter that can be found in both the filter object and slides, map out values that match the filter and push them into new filtered array
-                else if (slides[data_index].hasOwnProperty(data_key) && filterObj.hasOwnProperty(data_key)) {
-                    if(filterObj[data_key].includes(slides[data_index][data_key]) && filtered.indexOf(slides[data_index]) === -1){
-                        filtered.push(slides[data_index])
-                    }
-                    // if there is a filter for a key/value of original data whose value is a list, but we are just looking for a minimum of one match (one item in filter matching one item in value list)
-                    else if (filterObj[data_key].some(item => slides[data_index][data_key].includes(item)) && filtered.indexOf(slides[data_index]) === -1){
-                        filtered.push(slides[data_index])
-                }}
-            }
-        }
-        return filtered;
-    }
-
     function filterSlidesAnd(slides, filterObj) {
         const filteredSlides = slides.filter(slide => {
             //if the filter object is totally blank, a filter was never set, just return all slides
