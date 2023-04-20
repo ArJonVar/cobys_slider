@@ -7,11 +7,18 @@ const ImageSlider = ({slides}) => {
     const [filterState, setFilterState] = useState({});
     const [filteredSlides, setFilteredSlides] = useState(slides)
 
+    const filterNoResults=[{    
+        "type": "No Results",    
+        "url": "http://localhost:3000/coby9.jpg",    
+        "title": "Try Again",    
+        "filter": "DCT",
+        "list": []
+    }]
+
     function filterSlidesAnd(slides, filterObj) {
         const filteredSlides = slides.filter(slide => {
             //if the filter object is totally blank, a filter was never set, just return all slides
             if (Object.keys(filterObj).length === 0) {
-                // console.log("never set filter")
                 return slides
             }
             for (const key in filterObj) {
@@ -30,15 +37,24 @@ const ImageSlider = ({slides}) => {
           });
           return filteredSlides;
         }
+    
     // useEffect makes sure to rerender components correctly after a render, specificially, it makes sure to reset the index to zero when ever the filter changes
     // (so if you were on index 5 but your filtered list now is an array of length 3 it doesnt error out)
     useEffect(() => {
         const filteredSlides = filterSlidesAnd(slides, filterState);
-        setFilteredSlides(filteredSlides);
+        // controls for if the filter is about to return nothing, returns the case that is designed for when there is no returns
+        if(filteredSlides.length === 0){
+            setFilteredSlides(filterNoResults);
+        }
+        //returns filtered array if it exists
+        else {
+            setFilteredSlides(filteredSlides);
+        }
         if (currentIndex >= filteredSlides.length){
             console.log("index reset")
             setCurrentIndex(0); // add setCurrentIndex to dependency array
         }
+        // this leaves out filterNoResults on purpose b/c that causes infinite rerender
     }, [slides, filterState, setCurrentIndex, currentIndex]);
 
     const goToPrevious = () => {
