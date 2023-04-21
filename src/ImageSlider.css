@@ -29,9 +29,11 @@
   }
   
   .slideIframe {
-    width: 640;
-    height: 480; 
-    border: none;
+    width: 800px;
+    height: 600px;
+    border-radius: 10px;
+    background-position: center;
+    background-size: cover;
   }
   .dotsContainer {
     display: flex;

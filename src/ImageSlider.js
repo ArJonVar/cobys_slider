@@ -3,13 +3,18 @@ import './ImageSlider.css';
 import FilterButtons from "./FilterButtons";
 
 const ImageSlider = ({slides}) => {
+    // remembers where you are in the set of slides that are visible
     const [currentIndex, setCurrentIndex] = useState(0);
+    // helps filter the slides you can see
     const [filterState, setFilterState] = useState({});
     const [filteredSlides, setFilteredSlides] = useState(slides)
+    // helps get the size of image for resizing
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
 
     const filterNoResults=[{    
-        "type": "No Results",    
-        "url": "http://localhost:3000/coby9.jpg",    
+        "type": "jpg",    
+        "url": "http://localhost:3000/oops.jpg",    
         "title": "Try Again",    
         "filter": "DCT",
         "list": []
@@ -74,12 +79,26 @@ const ImageSlider = ({slides}) => {
         setCurrentIndex(slideIndex)
     }
 
+    const assessImgSize = (event) => {
+        setWidth(event.target.naturalWidth);
+        setHeight(event.target.naturalHeight);
+      };
+
     return(
         <div className = 'sliderContainer'>
             <div className = 'leftArrow' onClick = {goToPrevious} >❰</div>
             <div className = 'rightArrow' onClick = {goToNext}>❱</div>
                 {filteredSlides[currentIndex].type === 'jpg' ? (
-                    <div className= 'slideJPG' style= {{backgroundImage: `url(${filteredSlides[currentIndex].url})`}}></div>
+                    <div>
+                        <img 
+                        className= 'slideJPG' 
+                        alt="carousel"
+                        onLoad={assessImgSize}
+                        src={`${filteredSlides[currentIndex].url}`}
+                        />
+                        {/* <div>Width: {width}px</div>
+                        <div>Height: {height}px</div> */}
+                    </div>
                     ) : (
                     <iframe className = 'slideIframe' src={filteredSlides[currentIndex].url} allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" title='iframe'></iframe>
                     )}
@@ -88,10 +107,10 @@ const ImageSlider = ({slides}) => {
                         <div key={slideIndex} className='dot' onClick={() => goToSlide(slideIndex)}>●</div>
                     ))}
                 </div>
-            <h5>image metadata: {JSON.stringify(filteredSlides[currentIndex])}</h5>
+            {/* <h5>image metadata: {JSON.stringify(filteredSlides[currentIndex])}</h5>
             <h5>Filters: {JSON.stringify(filterState)}</h5>
             <h5>Filters: {filteredSlides.length}</h5>
-            <h1>Filters</h1>
+            <h1>Filters</h1> */}
             <div className ='filterContainer'>
                 <FilterButtons data={slides} setFilter={setFilterState} filter={filterState}/>
             </div>
