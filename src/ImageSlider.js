@@ -47,30 +47,53 @@ const ImageSlider = ({slides}) => {
           return filteredSlides;
         }
         
-        // finds the next iframe for preloading
-        function findNextIframe(filteredSlides, currentIndex) {
-            // Loop through the remaining slides starting from currentIndex + 1
-            for (let i = currentIndex + 1; i < filteredSlides.length; i++) {
-              // If the slide's type is 'iframe', return its index
-              if (filteredSlides[i].type === 'iframe') {
-                if (filteredSlides[i].url !== nextIframeUrl) {
-                  setNextIframeUrl(filteredSlides[i].url);
+    // finds the next iframe for preloading
+    function findNextIframe(filteredSlides, currentIndex) {
+        // Loop through the remaining slides starting from currentIndex + 1
+        for (let i = currentIndex + 1; i < filteredSlides.length; i++) {
+          // If the slide's type is 'iframe', return its index
+          if (filteredSlides[i].type === 'iframe') {
+            if (filteredSlides[i].url !== nextIframeUrl) {
+              setNextIframeUrl(filteredSlides[i].url);
+            }
+            break;
+          }
+          // If it's the last slide and no iframe is found, try looking backwards
+          if (i === filteredSlides.length - 1) {
+            for (let j = currentIndex - 1; j >= currentIndex; j--) {
+              if (filteredSlides[j].type === 'iframe') {
+                if (filteredSlides[j].url !== nextIframeUrl) {
+                  setNextIframeUrl(filteredSlides[j].url);
                 }
                 break;
               }
-              // If it's the last slide and no iframe is found, try looking backwards
-              if (i === filteredSlides.length - 1) {
-                for (let j = currentIndex - 1; j >= 0; j--) {
-                  if (filteredSlides[j].type === 'iframe') {
-                    if (filteredSlides[j].url !== nextIframeUrl) {
-                      setNextIframeUrl(filteredSlides[j].url);
-                    }
-                    break;
-                  }
-                }
-              }
             }
           }
+        }
+      }
+    function findPreviousIframe(filteredSlides, currentIndex) {
+      // Loop through the previous slides starting from currentIndex - 1
+      for (let i = currentIndex; i >= 0; i--) {
+        // If the slide's type is 'iframe', return its index
+        if (filteredSlides[i].type === 'iframe') {
+          if (filteredSlides[i].url !== nextIframeUrl) {
+            setNextIframeUrl(filteredSlides[i].url);
+          }
+          break;
+        }
+        // If it's the first slide and no iframe is found, try looking forwards
+        if (i === 0) {
+          for (let j = filteredSlides.length - 1; j >= currentIndex; j--) {
+            if (filteredSlides[j].type === 'iframe') {
+              if (filteredSlides[j].url !== nextIframeUrl) {
+                setNextIframeUrl(filteredSlides[j].url);
+              }
+              break;
+            }
+          }
+        }
+      }
+    }
     
     // useEffect makes sure to rerender components correctly after a render, specificially, it makes sure to reset the index to zero when ever the filter changes
     // (so if you were on index 5 but your filtered list now is an array of length 3 it doesnt error out)
@@ -106,12 +129,20 @@ const ImageSlider = ({slides}) => {
       }, [nextIframeUrl]);
 
     const goToPrevious = () => {
+        if (currentIndex === 0 && filteredSlides[filteredSlides.length - 1].type === 'iframe') {
+            findPreviousIframe(filteredSlides, filteredSlides.length - 1);
+        } else if (filteredSlides[currentIndex - 1].type === 'iframe') {
+            findPreviousIframe(filteredSlides, currentIndex - 1);
+        }
         const isFirstSlide = currentIndex === 0;
         const newIndex = isFirstSlide ? filteredSlides.length -1 : currentIndex -1
         setCurrentIndex(newIndex)
     }
 
     const goToNext= () => {
+        if (filteredSlides[currentIndex].type === 'iframe') {
+            findNextIframe(filteredSlides, currentIndex);
+        }
         const isLastSlide = currentIndex === filteredSlides.length - 1;
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex);
@@ -151,7 +182,7 @@ const ImageSlider = ({slides}) => {
                     <div>
                         <img 
                         className= 'slideJPG' 
-                        alt="carousel"
+                        alt="iframe-whitespace"
                         src="http://localhost:3000/white.jpg"
                         />
                     </div>
