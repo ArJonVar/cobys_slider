@@ -50,40 +50,17 @@ const ImageSlider = ({slides}) => {
     // finds the next iframe for preloading
     function findNextIframe(filteredSlides, currentIndex) {
         // Loop through the remaining slides starting from currentIndex + 1
-        for (let i = currentIndex + 1; i < filteredSlides.length; i++) {
+        for (let i = currentIndex; i < filteredSlides.length; i++) {
           // If the slide's type is 'iframe', return its index
           if (filteredSlides[i].type === 'iframe') {
             if (filteredSlides[i].url !== nextIframeUrl) {
-              setNextIframeUrl(filteredSlides[i].url);
+                setNextIframeUrl(filteredSlides[i].url);
             }
             break;
-          }
-          // If it's the last slide and no iframe is found, try looking backwards
-          if (i === filteredSlides.length - 1) {
-            for (let j = currentIndex - 1; j >= currentIndex; j--) {
-              if (filteredSlides[j].type === 'iframe') {
-                if (filteredSlides[j].url !== nextIframeUrl) {
-                  setNextIframeUrl(filteredSlides[j].url);
-                }
-                break;
-              }
-            }
-          }
         }
-      }
-    function findPreviousIframe(filteredSlides, currentIndex) {
-      // Loop through the previous slides starting from currentIndex - 1
-      for (let i = currentIndex; i >= 0; i--) {
-        // If the slide's type is 'iframe', return its index
-        if (filteredSlides[i].type === 'iframe') {
-          if (filteredSlides[i].url !== nextIframeUrl) {
-            setNextIframeUrl(filteredSlides[i].url);
-          }
-          break;
-        }
-        // If it's the first slide and no iframe is found, try looking forwards
-        if (i === 0) {
-          for (let j = filteredSlides.length - 1; j >= currentIndex; j--) {
+        // If it's the last slide and no iframe is found, try looking backwards
+        if (i === filteredSlides.length - 1) {
+          for (let j = 0; j < currentIndex; j++) {
             if (filteredSlides[j].type === 'iframe') {
               if (filteredSlides[j].url !== nextIframeUrl) {
                 setNextIframeUrl(filteredSlides[j].url);
@@ -91,6 +68,29 @@ const ImageSlider = ({slides}) => {
               break;
             }
           }
+        }
+        }
+      }
+    function findPreviousIframe(filteredSlides, currentIndex) {
+      // Loop through the previous slides starting from currentIndex - 1
+        for (let i = currentIndex; i >= 0; i--) {
+          // If the slide's type is 'iframe', return its index
+          if (filteredSlides[i].type === 'iframe') {
+            if (filteredSlides[i].url !== nextIframeUrl) {
+              setNextIframeUrl(filteredSlides[i].url);
+            }
+            break;
+          }
+        // If it's the first slide and no iframe is found, try looking forwards
+        if (i === 0) {
+            for (let j = filteredSlides.length - 1; j >= currentIndex; j--) {
+              if (filteredSlides[j].type === 'iframe') {
+                if (filteredSlides[j].url !== nextIframeUrl) {
+                  setNextIframeUrl(filteredSlides[j].url);
+                }
+                break;
+              }
+            }
         }
       }
     }
@@ -127,7 +127,7 @@ const ImageSlider = ({slides}) => {
     useEffect(() => {
         console.log('website changed to', nextIframeUrl)
       }, [nextIframeUrl]);
-
+    
     const goToPrevious = () => {
         if (currentIndex === 0 && filteredSlides[filteredSlides.length - 1].type === 'iframe') {
             findPreviousIframe(filteredSlides, filteredSlides.length - 1);
@@ -194,9 +194,9 @@ const ImageSlider = ({slides}) => {
                     onLoad={assessImgSize} 
                     className={`slideIframe${iFrameActive ? 'Active' : 'Hidden'}`} 
                     src={nextIframeUrl}
-                    // allowfullscreen="true" 
-                    // webkitallowfullscreen="true" 
-                    // mozallowfullscreen="true" 
+                    allowfullscreen="true" 
+                    webkitallowfullscreen="true" 
+                    mozallowfullscreen="true" 
                     ></iframe>
                 <div className = 'dotsContainer'>
                     {filteredSlides.map((slide, slideIndex) => (
