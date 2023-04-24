@@ -5,7 +5,7 @@
     left: 32px;
     font-size: 45px;
     color:#000;
-    z-index: 1;
+    z-index: 3;
     cursor: pointer;
   }
   
@@ -16,25 +16,79 @@
     right: 32px;
     font-size: 45px;
     color:#000;
-    z-index: 1;
+    z-index: 3;
     cursor: pointer;
   }
   
   .slideJPG{
-    width: 100%;
+    width: 600px;
     height: 100%;
     border-radius: 10px;
     background-position: center;
     background-size: cover;
   }
   
-  .slideIframe {
+  .slideIframeActive {
     width: 800px;
     height: 600px;
     border-radius: 10px;
     background-position: center;
     background-size: cover;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
+  .slideIframeHidden {
+    width: 800px;
+    height: 600px;
+    border-radius: 10px;
+    background-position: center;
+    background-size: cover;
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  .slideIframeActive {
+    width: 800px;
+    height: 600px;
+    border-radius: 10px;
+    background-position: center;
+    background-size: cover;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .slideIframe {
+    width: 800px;
+    height: 600px;
+    border-radius: 10px;
+  }
+  .slideIframeHidden {
+    width: 800px;
+    height: 600px;
+    border-radius: 10px;
+    background-position: center;
+    background-size: cover;
+    /* visibility: hidden; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
   .dotsContainer {
     display: flex;
     flex-direction: row;
@@ -51,6 +105,16 @@
     height: 100%;
     position: relative;
   }
+  
+  /* .hidden {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  visibility: hidden;
+} */
 
   /* .filterContainer{
     display: flex;

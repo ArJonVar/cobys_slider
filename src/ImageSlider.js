@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import './ImageSlider.css';
 import FilterButtons from "./FilterButtons";
 
@@ -11,6 +11,9 @@ const ImageSlider = ({slides}) => {
     // helps get the size of image for resizing
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
+    // helps with over achieving load by sensing if its time to display the hidden preloaded iframe
+    const [iFrameActive, setIFrameActive] = useState(false);
+    const [nextIframeUrl, setNextIframeUrl] = useState("")
 
     const filterNoResults=[{    
         "type": "jpg",    
@@ -24,23 +27,42 @@ const ImageSlider = ({slides}) => {
         const filteredSlides = slides.filter(slide => {
             //if the filter object is totally blank, a filter was never set, just return all slides
             if (Object.keys(filterObj).length === 0) {
-                return slides
+              return true
             }
+            let matchesAnyCondition = false;
             for (const key in filterObj) {
               if (Array.isArray(slide[key])) {
                 if (filterObj[key].length > 0) {
                   const filteredArray = slide[key].filter(item => filterObj[key].includes(item));
-                  if (filteredArray.length === 0) {
-                    return false;
+                  if (filteredArray.length > 0) {
+                    matchesAnyCondition = true;
                   }
                 }
-              } else if (filterObj[key].length > 0 && slide[key] !== filterObj[key][0]) {
-                return false;
+              } else if (filterObj[key].length > 0 && slide[key] === filterObj[key][0]) {
+                matchesAnyCondition = true;
               }
             }
-            return true;
+            return matchesAnyCondition;
           });
           return filteredSlides;
+        }
+    
+    function findNextIframe(filteredSlides, currentIndex) {
+        // Loop through the remaining slides starting from currentIndex + 1
+            for (let i = currentIndex; i < filteredSlides.length; i++) {
+                // If the slide's type is 'iframe', return its index
+                if (filteredSlides[i].type === 'iframe') {
+                  setNextIframeUrl(filteredSlides[i].url)
+                  break
+                }
+            }
+            // if it doesnt find anything ahead of it, try behind it
+            for (let i = 0; i < filteredSlides.length; i++) {
+                if (filteredSlides[i].type === 'iframe') {
+                    setNextIframeUrl(filteredSlides[i].url)
+                    break
+                }
+            }
         }
     
     // useEffect makes sure to rerender components correctly after a render, specificially, it makes sure to reset the index to zero when ever the filter changes
@@ -54,10 +76,42 @@ const ImageSlider = ({slides}) => {
         //returns filtered array if it exists
         else {
             setFilteredSlides(filteredSlides);
-        }
+            findNextIframe(filteredSlides, currentIndex)
+            console.log(nextIframeUrl)
         if (currentIndex >= filteredSlides.length){
             console.log("index reset")
             setCurrentIndex(0); // add setCurrentIndex to dependency array
+        }
+        // setting if the preloaded iframe should be visible
+        else if (filteredSlides[currentIndex].type === 'iframe'){
+            setIFrameActive(true)
+        } else {
+            setIFrameActive(false)
+        }
+        }
+        // this leaves out filterNoResults on purpose b/c that causes infinite rerender
+    }, [slides, filterState, setCurrentIndex, currentIndex]);
+    useEffect(() => {
+        const filteredSlides = filterSlidesAnd(slides, filterState);
+        // controls for if the filter is about to return nothing, returns the case that is designed for when there is no returns
+        if(filteredSlides.length === 0){
+            setFilteredSlides(filterNoResults);
+        }
+        //returns filtered array if it exists
+        else {
+            setFilteredSlides(filteredSlides);
+            findNextIframe(filteredSlides, currentIndex)
+            console.log(nextIframeUrl)
+        if (currentIndex >= filteredSlides.length){
+            console.log("index reset")
+            setCurrentIndex(0); // add setCurrentIndex to dependency array
+        }
+        // setting if the preloaded iframe should be visible
+        else if (filteredSlides[currentIndex].type === 'iframe'){
+            setIFrameActive(true)
+        } else {
+            setIFrameActive(false)
+        }
         }
         // this leaves out filterNoResults on purpose b/c that causes infinite rerender
     }, [slides, filterState, setCurrentIndex, currentIndex]);
@@ -71,7 +125,7 @@ const ImageSlider = ({slides}) => {
     const goToNext= () => {
         const isLastSlide = currentIndex === filteredSlides.length - 1;
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
-        setCurrentIndex(newIndex)
+        setCurrentIndex(newIndex);
     }
 
 
@@ -83,11 +137,18 @@ const ImageSlider = ({slides}) => {
         setWidth(event.target.naturalWidth);
         setHeight(event.target.naturalHeight);
       };
+    
+
 
     return(
         <div className = 'sliderContainer'>
+            {filteredSlides.length > 1 ? (
+            <div>
             <div className = 'leftArrow' onClick = {goToPrevious} >❰</div>
             <div className = 'rightArrow' onClick = {goToNext}>❱</div>
+            </div>
+            ):(
+            <div></div>)}
                 {filteredSlides[currentIndex].type === 'jpg' ? (
                     <div>
                         <img 
@@ -96,21 +157,36 @@ const ImageSlider = ({slides}) => {
                         onLoad={assessImgSize}
                         src={`${filteredSlides[currentIndex].url}`}
                         />
-                        {/* <div>Width: {width}px</div>
-                        <div>Height: {height}px</div> */}
                     </div>
                     ) : (
-                    <iframe className = 'slideIframe' src={filteredSlides[currentIndex].url} allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" title='iframe'></iframe>
+                    <div>
+                        <img 
+                        className= 'slideJPG' 
+                        alt="carousel"
+                        src="http://localhost:3000/white.jpg"
+                        />
+                    </div>
                     )}
+                    {/* <div>Width: {width}px</div>
+                    <div>Height: {height}px</div> */}
+                    <iframe 
+                    title='iframe'
+                    onLoad={assessImgSize} 
+                    className={`slideIframe${iFrameActive ? 'Active' : 'Hidden'}`} 
+                    src={nextIframeUrl}
+                    // allowfullscreen="true" 
+                    // webkitallowfullscreen="true" 
+                    // mozallowfullscreen="true" 
+                    ></iframe>
                 <div className = 'dotsContainer'>
                     {filteredSlides.map((slide, slideIndex) => (
                         <div key={slideIndex} className='dot' onClick={() => goToSlide(slideIndex)}>●</div>
                     ))}
                 </div>
-            {/* <h5>image metadata: {JSON.stringify(filteredSlides[currentIndex])}</h5>
+            <h5>image metadata: {JSON.stringify(filteredSlides[currentIndex])}</h5>
             <h5>Filters: {JSON.stringify(filterState)}</h5>
             <h5>Filters: {filteredSlides.length}</h5>
-            <h1>Filters</h1> */}
+            <h1>Filters</h1>
             <div className ='filterContainer'>
                 <FilterButtons data={slides} setFilter={setFilterState} filter={filterState}/>
             </div>
@@ -119,3 +195,7 @@ const ImageSlider = ({slides}) => {
 }
 
 export default ImageSlider;
+
+// CHATGPT Question:
+// I only want   findNextIframe(filteredSlides, currentIndex) to run if filteredSlides[currentIndex].type === '
+// 'iframe'
