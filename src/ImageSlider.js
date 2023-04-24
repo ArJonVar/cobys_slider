@@ -47,20 +47,25 @@ const ImageSlider = ({slides}) => {
           return filteredSlides;
         }
     
-    function findNextIframe(filteredSlides, currentIndex) {
-        // Loop through the remaining slides starting from currentIndex + 1
-            for (let i = currentIndex; i < filteredSlides.length; i++) {
+        function findNextIframe(filteredSlides, currentIndex) {
+            // Loop through the remaining slides starting from currentIndex + 1
+            for (let i = currentIndex + 1; i < filteredSlides.length; i++) {
                 // If the slide's type is 'iframe', return its index
                 if (filteredSlides[i].type === 'iframe') {
-                  setNextIframeUrl(filteredSlides[i].url)
-                  break
+                    console.log('took', filteredSlides[i].url);
+                    setNextIframeUrl(filteredSlides[i].url);
+                    console.log('next!', nextIframeUrl);
+                    break;
                 }
-            }
-            // if it doesnt find anything ahead of it, try behind it
-            for (let i = 0; i < filteredSlides.length; i++) {
-                if (filteredSlides[i].type === 'iframe') {
-                    setNextIframeUrl(filteredSlides[i].url)
-                    break
+                // If it's the last slide and no iframe is found, try looking backwards
+                if (i === filteredSlides.length - 1) {
+                    for (let j = currentIndex - 1; j >= 0; j--) {
+                        if (filteredSlides[j].type === 'iframe') {
+                            console.log('took backwards', filteredSlides[j].url);
+                            setNextIframeUrl(filteredSlides[j].url);
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -76,8 +81,11 @@ const ImageSlider = ({slides}) => {
         //returns filtered array if it exists
         else {
             setFilteredSlides(filteredSlides);
-            findNextIframe(filteredSlides, currentIndex)
-            console.log(nextIframeUrl)
+            //change the preloaded iframe if we are on an iframe
+            if (filteredSlides[currentIndex+1].type === 'iframe') {
+                findNextIframe(filteredSlides, currentIndex);
+                console.log('website changed to', nextIframeUrl)
+              }
         if (currentIndex >= filteredSlides.length){
             console.log("index reset")
             setCurrentIndex(0); // add setCurrentIndex to dependency array
@@ -91,30 +99,10 @@ const ImageSlider = ({slides}) => {
         }
         // this leaves out filterNoResults on purpose b/c that causes infinite rerender
     }, [slides, filterState, setCurrentIndex, currentIndex]);
+
     useEffect(() => {
-        const filteredSlides = filterSlidesAnd(slides, filterState);
-        // controls for if the filter is about to return nothing, returns the case that is designed for when there is no returns
-        if(filteredSlides.length === 0){
-            setFilteredSlides(filterNoResults);
-        }
-        //returns filtered array if it exists
-        else {
-            setFilteredSlides(filteredSlides);
-            findNextIframe(filteredSlides, currentIndex)
-            console.log(nextIframeUrl)
-        if (currentIndex >= filteredSlides.length){
-            console.log("index reset")
-            setCurrentIndex(0); // add setCurrentIndex to dependency array
-        }
-        // setting if the preloaded iframe should be visible
-        else if (filteredSlides[currentIndex].type === 'iframe'){
-            setIFrameActive(true)
-        } else {
-            setIFrameActive(false)
-        }
-        }
-        // this leaves out filterNoResults on purpose b/c that causes infinite rerender
-    }, [slides, filterState, setCurrentIndex, currentIndex]);
+        console.log('next2!', nextIframeUrl);
+      }, [nextIframeUrl]);
 
     const goToPrevious = () => {
         const isFirstSlide = currentIndex === 0;
