@@ -9,10 +9,8 @@ const FilterButtons = (props) => {
 
     const firstItem = data[0].assets[0]
     const keys = Object.keys(firstItem);
-
-    console.log("KEYS", keys)
-
-    function getUniqueValuesForKey(data, keyName) {
+    
+    function getUniqueValuesForOuterLevelKey(data, keyName) {
       const values = new Set();
       for (const item of data) {
         values.add(item[keyName]);
@@ -85,7 +83,7 @@ const FilterButtons = (props) => {
     function RadioOptions({filterKey}) {
         let valueArray = ""
         if (filterKey === 'region'){
-          valueArray = getUniqueValuesForKey(data, filterKey)}
+          valueArray = getUniqueValuesForOuterLevelKey(data, filterKey)}
         else {
           valueArray = getUniqueValuesForAssets(data, filterKey)}
         let sortedArray = sortArray(valueArray)
@@ -120,9 +118,9 @@ const FilterButtons = (props) => {
           <RadioOptions filterKey = 'region' />
         </div>
         {keys.map((key, index) => (
-          //set to only map through specific keys in json we care about
-          <div key={`filter ${key}, ${index}`} className= {`${(key === "people" || key === "service" || key === "tags" || key === "type") ? 'filter' : ''}`} >
-            {(key === "people" || key === "service" || key === "tags" || key === "type") &&
+          //set to only map through specific keys in json we care about (based on reset defaults variable)
+          <div key={`filter ${key}, ${index}`} className= {`${resetDefaults.hasOwnProperty(key) ? 'filter' : ''}`} >
+            {(resetDefaults.hasOwnProperty(key)) &&
             <div>
               <label className='radioTitle' key={index}>{key}</label>
               <RadioOptions filterKey = {key} />
