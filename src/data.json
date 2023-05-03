@@ -11,7 +11,7 @@
                 "description": "In a field",
                 "tags": [],
                 "people": ["Thor"],
-                "service": ["Outdoors", "Mountains"],
+                "services": ["Outdoors", "Mountains"],
                 "type": "jpg"
             },
             {
@@ -20,7 +20,7 @@
                 "description": "Right after Camp 2",
                 "tags": [],
                 "people": ["Coby"],
-                "service": ["Outdoors", "Mountain Climbing", "Mountains"],
+                "services": ["Outdoors", "Mountain Climbing", "Mountains"],
                 "type": "jpg"
             },
             {
@@ -29,7 +29,7 @@
                 "description": "Means 'mothers purse' and is the top of the climb",
                 "tags": [],
                 "people": [],
-                "service": ["Outdoors", "Mountains"],
+                "services": ["Outdoors", "Mountains"],
                 "type": "jpg"
             },
             {
@@ -38,7 +38,7 @@
                 "description": "Climbing above the clouds",
                 "tags": [],
                 "people": [],
-                "service": ["Outdoors", "Mountains"],
+                "services": ["Outdoors", "Mountains"],
                 "type": "jpg"
             },
             {
@@ -47,7 +47,7 @@
                 "description": "Bridge forcing hikers to cross river",
                 "tags": [],
                 "people": [],
-                "service": ["Outdoors"],
+                "services": ["Outdoors"],
                 "type": "jpg"
             }
         ]
@@ -64,7 +64,7 @@
                 "description": "This is a picture of a model",
                 "tags": [],
                 "people": [],
-                "service": ["Clash Detection"],
+                "services": ["Clash Detection"],
                 "type": "jpg"
             },
             {
@@ -73,7 +73,7 @@
                 "description": "Pretty cool looking!",
                 "tags": [],
                 "people": ["Katherine"],
-                "service": ["Night Vision"],
+                "services": ["Night Vision"],
                 "type": "jpg"
             },
             {
@@ -82,7 +82,7 @@
                 "description": "This is a picture of another model",
                 "tags": [],
                 "people": [],
-                "service": ["Night Vision"],
+                "services": ["Night Vision"],
                 "type": "jpg"
             },
             {
@@ -91,7 +91,7 @@
                 "description": "This is a picture of yet another model",
                 "tags": [],
                 "people": [],
-                "service": ["HVAC"],
+                "services": ["HVAC"],
                 "type": "jpg"
             },
             {
@@ -100,7 +100,7 @@
                 "description": "An overview",
                 "tags": ["Python", "Egnyte"],
                 "people": ["Coby", "Ariel"],
-                "service": ["Python"],
+                "services": ["Python"],
                 "type": "iframe"
             },
             {
@@ -109,7 +109,7 @@
                 "description": "3d Model of Clash",
                 "tags": ["DCT"],
                 "people": [],
-                "service": ["Clash Detection"],
+                "services": ["Clash Detection"],
                 "type": "iframe"
             },
             {
@@ -118,7 +118,7 @@
                 "description": "Schedule of the conference",
                 "tags": ["Conference", "Egnyte"],
                 "people": [],
-                "service": ["Digifab"],
+                "services": ["Digifab"],
                 "type": "iframe"
             },
             {
@@ -127,7 +127,7 @@
                 "description": "A picture of HVAC",
                 "tags": ["Egnyte"],
                 "people": [],
-                "service": ["HVAC"],
+                "services": ["HVAC"],
                 "type": "iframe"
             }
         ]
@@ -135,7 +135,7 @@
     {
         "uid": "3",
         "date": null,
-        "project_name": null,
+        "project_name": "Misc",
         "region": "Washington",
         "assets": [
             {
@@ -144,7 +144,7 @@
                 "description": "Lots of colors",
                 "tags": [],
                 "people": [],
-                "service": ["HVAC"],
+                "services": ["HVAC"],
                 "type": "jpg"
             },
             {
@@ -153,7 +153,7 @@
                 "description": "lots of diamonds",
                 "tags": [null],
                 "people": [null],
-                "service": [null],
+                "services": [null],
                 "type": "jpg"
             },
             {
@@ -162,7 +162,7 @@
                 "description": "very simple",
                 "tags": [],
                 "people": [],
-                "service": ["Side Cut"],
+                "services": ["Side Cut"],
                 "type": "jpg"
             },
             {
@@ -171,7 +171,7 @@
                 "description": "Big hill",
                 "tags": [],
                 "people": [],
-                "service": ["Model"],
+                "services": ["Model"],
                 "type": "jpg"
             },
             {
@@ -180,7 +180,7 @@
                 "description": "indeed cool!",
                 "tags": ["DCT"],
                 "people": [],
-                "service": ["Model"],
+                "services": ["Model"],
                 "type": "jpg"
             }
         ]
@@ -197,7 +197,7 @@
                 "description": "colorful seashell",
                 "tags": ["Seashell"],
                 "people": [],
-                "service": ["Seashell"],
+                "services": ["Seashell"],
                 "type": "jpg"
             },
             {
@@ -206,7 +206,7 @@
                 "description": "Lots of colors shifted",
                 "tags": ["Seashell"],
                 "people": [],
-                "service": ["Seashell"],
+                "services": ["Seashell"],
                 "type": "jpg"
             },
             {
@@ -215,7 +215,7 @@
                 "description": "extra lines",
                 "tags": ["Seashell"],
                 "people": [],
-                "service": ["Seashell"],
+                "services": ["Seashell"],
                 "type": "jpg"
             },
             {
@@ -224,7 +224,7 @@
                 "description": "Black and White Seashell",
                 "tags": ["Seashell"],
                 "people": [],
-                "service": ["Seashell"],
+                "services": ["Seashell"],
                 "type": "jpg"
             }
         ]
