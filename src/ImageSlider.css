@@ -19,7 +19,29 @@
     z-index: 3;
     cursor: pointer;
   }
+  .PleftArrow {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    left: 32px;
+    margin-top:-50px;
+    font-size: 45px;
+    color:#000;
+    z-index: 3;
+    cursor: pointer;
+  }
   
+  .PrightArrow {
+    position: absolute;
+    top:50%;
+    transform: translate(0, -50%);
+    right: 32px;
+    margin-top:-50px;
+    font-size: 45px;
+    color:#000;
+    z-index: 3;
+    cursor: pointer;
+  }
   .slideJPG{
     width: 600px;
     height: 100%;

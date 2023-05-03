@@ -5,15 +5,29 @@ const FilterButtons = (props) => {
     const data = props.data
     const setFilter = props.setFilter
     const filterState = props.filter
+    const resetDefaults =props.resetDefaults
 
-    const firstItem = data[0]
+    const firstItem = data[0].assets[0]
     const keys = Object.keys(firstItem);
+
+    console.log("KEYS", keys)
 
     function getUniqueValuesForKey(data, keyName) {
       const values = new Set();
       for (const item of data) {
         values.add(item[keyName]);
       }
+      return Array.from(values);
+    }
+    function getUniqueValuesForAssets(data, keyName, ) {
+      const values = new Set();
+      for (const project of data) {
+        for (const item of project.assets) {
+          // weed out nulls
+          if(item[keyName][0] !== null){
+          values.add(item[keyName]);
+          }
+      }}
       return Array.from(values);
     }
 
@@ -39,6 +53,12 @@ const FilterButtons = (props) => {
     const handleFilterReset = ({filterKey}) => {
       console.log('reset')
       setFilter({...filterState, [filterKey]: []})
+      // if key is in resetDefaults, it switches to the Default behvaior
+      for(const key in resetDefaults){
+        if (key === filterKey){
+          setFilter({...filterState, [filterKey]: resetDefaults[filterKey]})
+        }
+      }
     }
 
     // useful when value is a list, this turns into a list of list when we pick up all values of one key
@@ -63,7 +83,11 @@ const FilterButtons = (props) => {
 
 
     function RadioOptions({filterKey}) {
-        let valueArray = getUniqueValuesForKey(data, filterKey)
+        let valueArray = ""
+        if (filterKey === 'region'){
+          valueArray = getUniqueValuesForKey(data, filterKey)}
+        else {
+          valueArray = getUniqueValuesForAssets(data, filterKey)}
         let sortedArray = sortArray(valueArray)
         if(Array.isArray(valueArray[0])) {
           valueArray = flattenArray(valueArray)
@@ -88,12 +112,21 @@ const FilterButtons = (props) => {
           </div>
         );
       }
+
     return (
       <div className = 'filterContainer'>
+        <div key={`filter region, 0`} className= 'filter'>
+          <label className='radioTitle' key='0'>region</label>
+          <RadioOptions filterKey = 'region' />
+        </div>
         {keys.map((key, index) => (
-          <div key={`filter ${key}, ${index}`} className= 'filter'>
-            <label className='radioTitle' key={index}>{key}</label>
-            <RadioOptions filterKey = {key} />
+          //set to only map through specific keys in json we care about
+          <div key={`filter ${key}, ${index}`} className= {`${(key === "people" || key === "service" || key === "tags" || key === "type") ? 'filter' : ''}`} >
+            {(key === "people" || key === "service" || key === "tags" || key === "type") &&
+            <div>
+              <label className='radioTitle' key={index}>{key}</label>
+              <RadioOptions filterKey = {key} />
+              </div>}
           </div>
         ))}
       </div>

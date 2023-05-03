@@ -1,50 +1,232 @@
-[  
-    {    
-        "type": "jpg",    
-        "url": "http://localhost:3000/image-1.jpg",    
-        "title": "Thor",    
-        "filter": "A"  
-    },  
-    {    
-        "type": "jpg",    
-        "url": "http://localhost:3000/image-2.jpg",    
-        "title": "Coby",    
-        "filter": "A" 
-    },  
-    {    
-        "type": "jpg",    
-        "url": "http://localhost:3000/image-3.jpg",    
-        "title": "Dablam",    
-        "filter": "B"  
-    },  
-    {    
-        "type": "jpg",    
-        "url": "http://localhost:3000/image-4.jpg",    
-        "title": "Tenzing",    
-        "filter": "A"  
-    },  
-    {    
-        "type": "jpg",    
-        "url": "http://localhost:3000/image-5.jpg",    
-        "title": "Bridge",    
-        "filter": "B"  
-    },  
-    {    
-        "type": "jpg",    
-        "url": "http://localhost:3000/image-5.jpg",    
-        "title": "Bridge",    
-        "filter": "A"  
-    },  
-    {    
-        "type": "iframe",    
-        "url": "https://dowbuilt1.autodesk360.com/shares/public/SH919a0QTf3c32634dcf4e67020582d7a356?mode=embed",    
-        "title": "autodesk",    
-        "filter": "A"  
-    },  
-    {    
-        "type": "iframe",    
-        "url": "https://dowbuilt.egnyte.com/dl/nL9EckmCPM?mode=embed",    
-        "title": "egnyte",    
-        "filter": "B"  
+[
+    {
+        "uid": "1",
+        "date": null,
+        "project_name": "Ama Dablam",
+        "region" : "Nepal",
+        "assets": [
+            {
+                "url": "http://localhost:3000/image-1.jpg",
+                "title": "Thor",
+                "description": "In a field",
+                "tags": [],
+                "people": ["Thor"],
+                "service": ["Outdoors", "Mountains"],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/image-2.jpg",
+                "title": "Coby above Camp 2",
+                "description": "Right after Camp 2",
+                "tags": [],
+                "people": ["Coby"],
+                "service": ["Outdoors", "Mountain Climbing", "Mountains"],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/image-3.jpg",
+                "title": "The Dablam",
+                "description": "Means 'mothers purse' and is the top of the climb",
+                "tags": [],
+                "people": [],
+                "service": ["Outdoors", "Mountains"],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/image-4.jpg",
+                "title": "Above the Clouds",
+                "description": "Climbing above the clouds",
+                "tags": [],
+                "people": [],
+                "service": ["Outdoors", "Mountains"],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/image-5.jpg",
+                "title": "Bridge",
+                "description": "Bridge forcing hikers to cross river",
+                "tags": [],
+                "people": [],
+                "service": ["Outdoors"],
+                "type": "jpg"
+            }
+        ]
+    },
+    {
+        "uid": "2",
+        "date": null,
+        "project_name": "Construction",
+        "region": "Washington",
+        "assets": [
+            {
+                "url": "http://localhost:3000/coby.jpg",
+                "title": "3d Model picture",
+                "description": "This is a picture of a model",
+                "tags": [],
+                "people": [],
+                "service": ["Clash Detection"],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/coby1.jpg",
+                "title": "Pink Picture",
+                "description": "Pretty cool looking!",
+                "tags": [],
+                "people": ["Katherine"],
+                "service": ["Night Vision"],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/coby2.jpg",
+                "title": "Grey picture",
+                "description": "This is a picture of another model",
+                "tags": [],
+                "people": [],
+                "service": ["Night Vision"],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/coby3.jpg",
+                "title": "Grey and purple picture",
+                "description": "This is a picture of yet another model",
+                "tags": [],
+                "people": [],
+                "service": ["HVAC"],
+                "type": "jpg"
+            },
+            {
+                "url": "https://dowbuilt.egnyte.com/dl/grDUC3Pdeo?mode=embed",
+                "title": "Major Python Automation Work Overview",
+                "description": "An overview",
+                "tags": ["Python", "Egnyte"],
+                "people": ["Coby", "Ariel"],
+                "service": ["Python"],
+                "type": "iframe"
+            },
+            {
+                "url": "https://dowbuilt1.autodesk360.com/shares/public/SH919a0QTf3c32634dcf4e67020582d7a356?mode=embed",
+                "title": "Fusion 360",
+                "description": "3d Model of Clash",
+                "tags": ["DCT"],
+                "people": [],
+                "service": ["Clash Detection"],
+                "type": "iframe"
+            },
+            {
+                "url": "https://dowbuilt.egnyte.com/app/index.do#storage/files/1/Shared/Digital%20Construction%20Team/01_R%26D/3D%20Printed%20Housing?mode=embed",
+                "title": "3d House Conference",
+                "description": "Schedule of the conference",
+                "tags": ["Conference", "Egnyte"],
+                "people": [],
+                "service": ["Digifab"],
+                "type": "iframe"
+            },
+            {
+                "url": "https://dowbuilt.egnyte.com/dl/nL9EckmCPM?mode=embed",
+                "title": "Brace Point HVAC",
+                "description": "A picture of HVAC",
+                "tags": ["Egnyte"],
+                "people": [],
+                "service": ["HVAC"],
+                "type": "iframe"
+            }
+        ]
+    },
+    {
+        "uid": "3",
+        "date": null,
+        "project_name": null,
+        "region": "Washington",
+        "assets": [
+            {
+                "url": "http://localhost:3000/coby4.jpg",
+                "title": "Indoor Scan",
+                "description": "Lots of colors",
+                "tags": [],
+                "people": [],
+                "service": ["HVAC"],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/coby5.jpg",
+                "title": "Side building",
+                "description": "lots of diamonds",
+                "tags": [null],
+                "people": [null],
+                "service": [null],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/coby6.jpg",
+                "title": "House Side Cut",
+                "description": "very simple",
+                "tags": [],
+                "people": [],
+                "service": ["Side Cut"],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/coby11.jpg",
+                "title": "plan on hill",
+                "description": "Big hill",
+                "tags": [],
+                "people": [],
+                "service": ["Model"],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/coby12.jpg",
+                "title": "plan in ground",
+                "description": "indeed cool!",
+                "tags": ["DCT"],
+                "people": [],
+                "service": ["Model"],
+                "type": "jpg"
+            }
+        ]
+    },
+    {
+        "uid": "4",
+        "date": null,
+        "project_name": "Seashells",
+        "region":"The Sea",
+        "assets": [
+            {
+                "url": "http://localhost:3000/coby7.jpg",
+                "title": "Seashell 1",
+                "description": "colorful seashell",
+                "tags": ["Seashell"],
+                "people": [],
+                "service": ["Seashell"],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/coby8.jpg",
+                "title": "Seashell 2",
+                "description": "Lots of colors shifted",
+                "tags": ["Seashell"],
+                "people": [],
+                "service": ["Seashell"],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/coby9.jpg",
+                "title": "Seashell 3",
+                "description": "extra lines",
+                "tags": ["Seashell"],
+                "people": [],
+                "service": ["Seashell"],
+                "type": "jpg"
+            },
+            {
+                "url": "http://localhost:3000/coby10.jpg",
+                "title": "Seashell 4",
+                "description": "Black and White Seashell",
+                "tags": ["Seashell"],
+                "people": [],
+                "service": ["Seashell"],
+                "type": "jpg"
+            }
+        ]
     }
 ]
