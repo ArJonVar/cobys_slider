@@ -26,46 +26,49 @@ const ImageSliderComponent = ({slides}) => {
 
     function filterSlides(slides, filterObj) {
       let filteredProjects = slides;
-    
+  
       // Check if filterObj contains only empty arrays
       const allEmptyArrays = Object.values(filterObj).every(val => Array.isArray(val) && val.length === 0);
-    
+  
       // If all values are empty arrays, return the original slides array
       if (allEmptyArrays) {
-        return filteredProjects;
+          return filteredProjects;
       }
-    
+  
       // filter regions first because it has a different spot in data structure to filter for
       if (filterObj.region.length !== 0) {
-        filteredProjects = slides.filter(slide => filterObj.region.includes(slide.region));
+          filteredProjects = slides.filter(slide => filterObj.region.includes(slide.region));
       }
-    
+  
       // Otherwise, filter the slides based on the filterObj (other than region)
       const filteredAssetKeys = Object.keys(filterObj).filter(key => key !== 'region' && filterObj[key].length > 0);
       let matchesAnyCondition = false;
       filteredProjects = filteredProjects.map(project => {
-        const filteredAssets = project.assets.filter(asset => {
-          let assetMatches = filteredAssetKeys.some(key => {
-            return filterObj[key].some(tag => Array.isArray(asset[key]) && asset[key].includes(tag));
+          const filteredAssets = project.assets.filter(asset => {
+              let assetMatches = true;
+              for (const key of filteredAssetKeys) {
+                  if (!filterObj[key].some(tag => asset[key].includes(tag))) {
+                      assetMatches = false;
+                      break;
+                  }
+              }
+              if (assetMatches) {
+                  matchesAnyCondition = true;
+                  return true;
+              }
+              return false;
           });
-    
-          if (assetMatches) {
-            matchesAnyCondition = true;
-            return true;
-          }
-          return false;
-        });
-        return {
-          ...project,
-          assets: filteredAssets
-        };
+          return {
+              ...project,
+              assets: filteredAssets
+          };
       }).filter(project => project.assets.length > 0); // Remove any project with an empty array for its assets
-    
+  
       if (!matchesAnyCondition) {
-        return slides;
+          return slides;
       }
       return filteredProjects;
-    }
+  }
 
     // rerenders after filters, making sure to change the dataset (enacting the filter)
     useEffect(() => {
