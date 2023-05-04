@@ -12,9 +12,7 @@ const ImageSliderComponent = ({slides}) => {
     const [filterState, setFilterState] = useState(resetDefaults);
     // differentiates project and slide options
     const [projectArray, setProjectArray] = useState(slides)
-    const [filteredProjectArray, setFilteredProjectArray] = useState(slides)
     const [slideArray, setSlideArray] = useState(slides[0].assets)
-    const [filteredSlideArray, setFilteredSlideArray] = useState(slides)
     // sets trending direction when an arrow is used, and loads the next iframe in that direction
     const [trendingDirection, setTrendingDirection] = useState("->")
 
@@ -27,73 +25,78 @@ const ImageSliderComponent = ({slides}) => {
     }]
 
     function filterSlides(slides, filterObj) {
-        let filteredProjects = slides;
-      
-        // Check if filterObj contains only empty arrays
-        const allEmptyArrays = Object.values(filterObj).every(val => Array.isArray(val) && val.length === 0);
-      
-        // If all values are empty arrays, return the original slides array
-        if (allEmptyArrays) {
-          return filteredProjects;
-        }
-      
-        // filter regions first because it has different spot in data structure to filter for
-        if (filterObj.region.length !== 0) {
-          filteredProjects = slides.filter(slide => filterObj.region.includes(slide.region));
-        }
-      
-        // Otherwise, filter the slides based on the filterObj (other than region)
-        const filteredAssetKeys = Object.keys(filterObj).filter(key => key !== 'region' && filterObj[key].length > 0);
-        let matchesAnyCondition = false;
-        filteredProjects = filteredProjects.map(project => {
-          const filteredAssets = project.assets.filter(asset => {
-            let assetMatches = true;
-            for (const key of filteredAssetKeys) {
-              if (!filterObj[key].some(tag => asset[key].includes(tag))) {
-                assetMatches = false;
-                break;
-              }
-            }
-            if (assetMatches) {
-              matchesAnyCondition = true;
-              return true;
-            }
-            return false;
-          });
-          return {
-            ...project,
-            assets: filteredAssets
-          };
-        });
-      
-        if (!matchesAnyCondition) {
-          return slides;
-        }
+      let filteredProjects = slides;
+    
+      // Check if filterObj contains only empty arrays
+      const allEmptyArrays = Object.values(filterObj).every(val => Array.isArray(val) && val.length === 0);
+    
+      // If all values are empty arrays, return the original slides array
+      if (allEmptyArrays) {
         return filteredProjects;
       }
-      
-      console.log("FILTER", filterSlides(slides, filterState));
+    
+      // filter regions first because it has a different spot in data structure to filter for
+      if (filterObj.region.length !== 0) {
+        filteredProjects = slides.filter(slide => filterObj.region.includes(slide.region));
+      }
+    
+      // Otherwise, filter the slides based on the filterObj (other than region)
+      const filteredAssetKeys = Object.keys(filterObj).filter(key => key !== 'region' && filterObj[key].length > 0);
+      let matchesAnyCondition = false;
+      filteredProjects = filteredProjects.map(project => {
+        const filteredAssets = project.assets.filter(asset => {
+          let assetMatches = filteredAssetKeys.some(key => {
+            return filterObj[key].some(tag => Array.isArray(asset[key]) && asset[key].includes(tag));
+          });
+    
+          if (assetMatches) {
+            matchesAnyCondition = true;
+            return true;
+          }
+          return false;
+        });
+        return {
+          ...project,
+          assets: filteredAssets
+        };
+      }).filter(project => project.assets.length > 0); // Remove any project with an empty array for its assets
+    
+      if (!matchesAnyCondition) {
+        return slides;
+      }
+      return filteredProjects;
+    }
 
-        // useEffect makes sure to rerender components correctly after a render, specificially, it makes sure to reset the index to zero when ever the filter changes
-    // (so if you were on index 5 but your filtered list now is an array of length 3 it doesnt error out)
-    // useEffect(() => {
-    //     console.log('USEEFFECT')
-    //     // controls for if the filter is about to return nothing, returns the case that is designed for when there is no returns
-    //     if(filterSlides(slides, filterState).length === 0){
-    //         setProjectArray(filterNoResults);
-    //     }
-    //     //returns filtered array if it exists
-    //     else {
-    //         console.log('USEEFFECT2')
-    //         setProjectArray(filterSlides(slides, filterState));
-    //     }
-    // }, [filterState]);
-
-    // useEffect(() => {
-    //     console.log('USEEFFECT3')
-    //     setSlideArray(projectArray[currentProjectIndex])
-    // }, [projectArray]);
-
+    // rerenders after filters, making sure to change the dataset (enacting the filter)
+    useEffect(() => {
+    
+      const filteredProjects = filterSlides(slides, filterState);
+    
+      if (filteredProjects.length === 0) {
+        setProjectArray(filterNoResults);
+        setCurrentSlideIndex(0)
+      } else {
+        setCurrentSlideIndex(0)
+        setProjectArray(filteredProjects);
+    
+        // Find the index of the first project that has at least one photo after applying the filter
+        const firstProjectWithPhotosIndex = filteredProjects.findIndex(
+          (project) => project.assets.length > 0
+        );
+    
+        // If there is no project with photos, set the project array to filterNoResults
+        if (firstProjectWithPhotosIndex === -1) {
+          setProjectArray(filterNoResults);
+        } else {
+          // Update the current project index if the current project has no photos after applying the filter
+          if (filteredProjects[currentProjectIndex].assets.length === 0) {
+            setCurrentSlideIndex(0)
+            setCurrentProjectIndex(firstProjectWithPhotosIndex);
+          }
+        }
+      }
+      setSlideArray(filteredProjects[currentProjectIndex].assets)
+    }, [filterState]);
 
     useEffect(() => {
       console.log(
