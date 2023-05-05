@@ -62,6 +62,30 @@ const FilterButtons = (props) => {
       }
     }
 
+    const handleFilterSelectAll = ({filterKey}) => {
+      let valueArray = ""
+      if (filterKey === 'region'){
+        valueArray = getUniqueValuesForOuterLevelKey(data, filterKey)
+      } else {
+        valueArray = getUniqueValuesForAssets(data, filterKey)}
+      let sortedArray = sortArray(valueArray)
+      if(Array.isArray(valueArray[0])) {
+        valueArray = flattenArray(valueArray)
+        sortedArray = sortArray(valueArray)
+      }
+      const remainingOptions = getRemainingOptions(projectArray);
+      const filteredArray = sortedArray.filter((filterValue) => {
+        if (remainingOptions.some(asset => asset[filterKey].includes(filterValue))) {
+          return true;
+        }
+        return false;
+      });
+
+
+      setFilter({...filterState, [filterKey]: filteredArray })
+      // if key is in resetDefaults, it switches to the Default behvaior
+    }
+
     // useful when value is a list, this turns into a list of list when we pick up all values of one key
     function flattenArray(arrays) {
       const flattened = arrays.reduce((accumulator, currentValue) => {
@@ -148,54 +172,35 @@ const FilterButtons = (props) => {
                 </label>
               </div>
             ))}
-            <button
-              onClick={() => handleFilterReset({ filterKey: filterKey })}
-              name="option"
-              key={`input ${resetIndex}`}
-              value="reset"
-            >
-              RESET
-            </button>
+            <div className = 'filter-button-container'>
+              <button
+                onClick={() => handleFilterSelectAll({ filterKey: filterKey })}
+                name="option"
+                key={`input ${resetIndex}`}
+                value="reset"
+                className = 'filter-button'
+              >
+                ALL
+              </button>
+              <button
+                onClick={() => handleFilterReset({ filterKey: filterKey })}
+                name="option"
+                key={`input ${resetIndex}`}
+                value="reset"
+                className = 'filter-button'
+              >
+                RESET
+              </button>
+            </div>
           </div>
         );
       }
       
-      function RadioOptionsNeverDisabled({filterKey}) {
-        let valueArray = ""
-        if (filterKey === 'region'){
-          valueArray = getUniqueValuesForOuterLevelKey(data, filterKey)}
-        else {
-          valueArray = getUniqueValuesForAssets(data, filterKey)}
-        let sortedArray = sortArray(valueArray)
-        if(Array.isArray(valueArray[0])) {
-          valueArray = flattenArray(valueArray)
-          sortedArray = sortArray(valueArray)
-        }
-        const resetIndex = valueArray.length + 1
-        return (
-          <div key={`outerdiv ${filterKey}`}>
-            {sortedArray.map((filterValue, index) => (
-              <div key={`nonarray innerdiv ${index}`}>
-                <input type="checkbox" 
-                  checked = {filterState.hasOwnProperty(filterKey) ? filterState[filterKey].includes(filterValue) : false}
-                  onChange= {() => handleFilterClick({filterKey: filterKey, filterValue: filterValue})}
-                  name="option" 
-                  key={`input ${index}`} 
-                  value={filterValue} />
-                <label className = 'option' key={`label ${index}`}>{filterValue}</label>
-              </div>
-            ))}
-            <button onClick={() => handleFilterReset({filterKey: filterKey})}
-              name="option" key={`input ${resetIndex}`} value='reset'>RESET</button>
-          </div>
-        );
-    }
-
     return (
       <div className = 'filterContainer'>
         <div key={`filter region, 0`} className= 'filter'>
           <label className='radioTitle' key='0'>region</label>
-          <RadioOptionsNeverDisabled filterKey = 'region' />
+          <RadioOptions filterKey = 'region' />
         </div>
         {keys.map((key, index) => (
           //set to only map through specific keys in json we care about (based on reset defaults variable)

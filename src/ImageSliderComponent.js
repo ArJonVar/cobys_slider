@@ -5,7 +5,7 @@ import ImageDisplay from "./ImageDisplay";
 
 const ImageSliderComponent = ({slides}) => {
     // remembers where you are in the set of slides that are visible
-    const resetDefaults = {"region":['Nepal'], "tags":[], "people":[], "services":[], "type":["jpg"]}
+    const resetDefaults = {"region":[], "tags":[], "people":[], "services":[], "type":["jpg"]}
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
     const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
     // helps filter the slides you can see (defaults to pics only)
@@ -16,13 +16,24 @@ const ImageSliderComponent = ({slides}) => {
     // sets trending direction when an arrow is used, and loads the next iframe in that direction
     const [trendingDirection, setTrendingDirection] = useState("->")
 
-    const filterNoResults=[{    
-        "type": "jpg",    
-        "url": "http://localhost:3000/oops.jpg",    
-        "title": "Try Again",    
-        "filter": "DCT",
-        "list": []
-    }]
+    const filterNoResults=[
+      {"uid": "666",
+      "date": null,
+      "project_name": "No Assets Returned",
+      "region": "Local Host",
+      "assets": [
+        {
+        "url": "http://localhost:3000/oops.jpg",
+        "title": "Try Again", 
+        "description": "Filter returned no values!",
+        "tags": [],
+        "people": [],
+        "services": [],
+        "type": "jpg"    
+        }
+      ]
+    }
+  ]
 
     function filterSlides(slides, filterObj) {
       let filteredProjects = slides;
@@ -65,7 +76,8 @@ const ImageSliderComponent = ({slides}) => {
       }).filter(project => project.assets.length > 0); // Remove any project with an empty array for its assets
   
       if (!matchesAnyCondition) {
-          return slides;
+        console.log('no results')
+        return filterNoResults;
       }
       return filteredProjects;
   }
