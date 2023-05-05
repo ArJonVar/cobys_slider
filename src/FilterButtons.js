@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect} from "react";
 import './FilterButtons.css';
 
 const FilterButtons = (props) => {
@@ -12,6 +12,33 @@ const FilterButtons = (props) => {
     //somehow my getRemianingOptions added a regions key/value to the data.assets, and I have to take that out so the filters will render correctly
     const keysWRegion = Object.keys(firstItem);
     const keys = keysWRegion.filter(item => !item.includes('region'))
+
+    //unchecked impossible options that were previously checked
+    useEffect(() => {
+      const remainingOptions = getRemainingOptions(projectArray);
+    
+      const updatedFilterState = { ...filterState };
+    
+      let filterStateChanged = false;
+      
+      for (const filterKey in filterState) {
+        if (filterState.hasOwnProperty(filterKey) && Array.isArray(filterState[filterKey])) {
+          const newFilterValues = filterState[filterKey].filter((filterValue) =>
+            remainingOptions.some((asset) => asset[filterKey].includes(filterValue))
+          );
+          
+          if (newFilterValues.length !== filterState[filterKey].length) {
+            filterStateChanged = true;
+            updatedFilterState[filterKey] = newFilterValues;
+          }
+        }
+      }
+    
+      if (filterStateChanged) {
+        setFilter(updatedFilterState);
+      }
+    }, [projectArray]);
+    
     
     function getUniqueValuesForOuterLevelKey(data, keyName) {
       const values = new Set();
@@ -176,7 +203,7 @@ const FilterButtons = (props) => {
               <button
                 onClick={() => handleFilterSelectAll({ filterKey: filterKey })}
                 name="option"
-                key={`input ${resetIndex}`}
+                key={`ALL ${resetIndex}`}
                 value="reset"
                 className = 'filter-button'
               >
@@ -185,7 +212,7 @@ const FilterButtons = (props) => {
               <button
                 onClick={() => handleFilterReset({ filterKey: filterKey })}
                 name="option"
-                key={`input ${resetIndex}`}
+                key={`RESET ${resetIndex}`}
                 value="reset"
                 className = 'filter-button'
               >
