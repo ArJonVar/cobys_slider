@@ -26,3 +26,17 @@
     overflow:hidden;
     overflow-wrap:break-word;
 }
+
+.option.disabled {
+    color: #aaa;
+  }
+
+.filter-button-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.filter-button{
+    margin-top: 5px;
+}
