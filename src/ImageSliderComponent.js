@@ -5,11 +5,11 @@ import ImageDisplay from "./ImageDisplay";
 
 const ImageSliderComponent = ({slides}) => {
     // remembers where you are in the set of slides that are visible
-    const resetDefaults = {"region":[], "tags":[], "people":[], "services":[], "type":["jpg"]}
+    const resetDefaults = {"region":[], "tags":[], "people":[], "services":[], "type":[]}
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
     const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
     // helps filter the slides you can see (defaults to pics only)
-    const [filterState, setFilterState] = useState(resetDefaults);
+    const [filterState, setFilterState] = useState({"region":[], "tags":[], "people":[], "services":[], "type":["jpg"]});
     // differentiates project and slide options
     const [projectArray, setProjectArray] = useState(slides)
     const [slideArray, setSlideArray] = useState(slides[0].assets)
