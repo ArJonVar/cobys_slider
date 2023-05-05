@@ -6,9 +6,12 @@ const FilterButtons = (props) => {
     const setFilter = props.setFilter
     const filterState = props.filter
     const resetDefaults =props.resetDefaults
+    const projectArray = props.projectArray
 
     const firstItem = data[0].assets[0]
-    const keys = Object.keys(firstItem);
+    //somehow my getRemianingOptions added a regions key/value to the data.assets, and I have to take that out so the filters will render correctly
+    const keysWRegion = Object.keys(firstItem);
+    const keys = keysWRegion.filter(item => !item.includes('region'))
     
     function getUniqueValuesForOuterLevelKey(data, keyName) {
       const values = new Set();
@@ -79,8 +82,85 @@ const FilterButtons = (props) => {
       return numSorted;
     }
 
-
+    function getRemainingOptions(data) {
+      const assetsSet = new Set();
+    
+      data.forEach(project => {
+        const region = project.region;
+        project.assets.forEach(asset => {
+          // Add region property to asset
+          asset.region = region;
+    
+          // Convert asset object to string to store in the Set
+          const assetString = JSON.stringify(asset);
+    
+          // Add the asset string to the Set, which ensures uniqueness
+          assetsSet.add(assetString);
+        });
+      });
+    
+      // Convert the Set back to an array of objects
+      const uniqueAssets = Array.from(assetsSet).map(assetString => JSON.parse(assetString));
+    
+      return uniqueAssets;
+    }
+  
     function RadioOptions({filterKey}) {
+        let valueArray = ""
+        if (filterKey === 'region'){
+          valueArray = getUniqueValuesForOuterLevelKey(data, filterKey)
+        } else {
+          valueArray = getUniqueValuesForAssets(data, filterKey)}
+        let sortedArray = sortArray(valueArray)
+        if(Array.isArray(valueArray[0])) {
+          valueArray = flattenArray(valueArray)
+          sortedArray = sortArray(valueArray)
+        }
+        const resetIndex = valueArray.length + 1;
+        const remainingOptions = getRemainingOptions(projectArray);
+
+        return (
+          <div key={`outerdiv ${filterKey}`}>
+            {sortedArray.map((filterValue, index) => (
+              <div key={`nonarray innerdiv ${index}`}>
+                <input
+                  type="checkbox"
+                  checked={
+                    filterState.hasOwnProperty(filterKey)
+                      ? filterState[filterKey].includes(filterValue)
+                      : false
+                  }
+                  onChange={() =>
+                    handleFilterClick({ filterKey: filterKey, filterValue: filterValue })
+                  }
+                  name="option"
+                  key={`input ${index}`}
+                  value={filterValue}
+                  disabled={!remainingOptions.some(asset => asset[filterKey].includes(filterValue))}
+                />
+                <label
+                  className={`option ${
+                    !remainingOptions.some(asset => asset[filterKey].includes(filterValue)) ? "disabled" : ""
+                  }`}
+                  key={`label ${index}`}
+                >
+                  {filterValue}
+                </label>
+              </div>
+            ))}
+            <button
+              onClick={() => handleFilterReset({ filterKey: filterKey })}
+              name="option"
+              key={`input ${resetIndex}`}
+              value="reset"
+            >
+              RESET
+            </button>
+          </div>
+        );
+      }
+      
+      function RadioOptionsNeverDisabled({filterKey}) {
         let valueArray = ""
         if (filterKey === 'region'){
           valueArray = getUniqueValuesForOuterLevelKey(data, filterKey)}
@@ -109,13 +189,13 @@ const FilterButtons = (props) => {
               name="option" key={`input ${resetIndex}`} value='reset'>RESET</button>
           </div>
         );
-      }
+    }
 
     return (
       <div className = 'filterContainer'>
         <div key={`filter region, 0`} className= 'filter'>
           <label className='radioTitle' key='0'>region</label>
-          <RadioOptions filterKey = 'region' />
+          <RadioOptionsNeverDisabled filterKey = 'region' />
         </div>
         {keys.map((key, index) => (
           //set to only map through specific keys in json we care about (based on reset defaults variable)

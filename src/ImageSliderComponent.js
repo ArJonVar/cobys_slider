@@ -5,7 +5,7 @@ import ImageDisplay from "./ImageDisplay";
 
 const ImageSliderComponent = ({slides}) => {
     // remembers where you are in the set of slides that are visible
-    const resetDefaults = {"region":[], "tags":[], "people":[], "services":[], "type":["jpg"]}
+    const resetDefaults = {"region":['Nepal'], "tags":[], "people":[], "services":[], "type":["jpg"]}
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
     const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
     // helps filter the slides you can see (defaults to pics only)
@@ -175,7 +175,7 @@ const ImageSliderComponent = ({slides}) => {
             <h5>Filters: {JSON.stringify(filterState)}</h5>
             <h1>Filters</h1>
             <div className ='filterContainer'>
-                <FilterButtons data={slides} setFilter={setFilterState} filter={filterState} resetDefaults={resetDefaults}/>
+                <FilterButtons data={slides} setFilter={setFilterState} filter={filterState} resetDefaults={resetDefaults} projectArray={projectArray}/>
             </div>
         </div>
     )
