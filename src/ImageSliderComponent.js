@@ -103,8 +103,8 @@ const ImageSliderComponent = ({slides}) => {
         if (firstProjectWithPhotosIndex === -1) {
           setProjectArray(filterNoResults);
         } else {
-          // it becomes undefined if the project index is past what exists post filter, the setting of project index doesn't set in fast enough
-          if (filteredProjects[currentProjectIndex]?.property === undefined){
+          // Update the current project index if the current project has no photos after applying the filter
+          if (filteredProjects[currentProjectIndex]== null){
             setCurrentProjectIndex(0)
             currentProjectIndexTransition = 0 
             setCurrentSlideIndex(0)
