@@ -84,7 +84,7 @@ const ImageSliderComponent = ({slides}) => {
 
     // rerenders after filters, making sure to change the dataset (enacting the filter)
     useEffect(() => {
-    
+      let currentProjectIndexTransition = currentProjectIndex
       const filteredProjects = filterSlides(slides, filterState);
     
       if (filteredProjects.length === 0) {
@@ -103,14 +103,22 @@ const ImageSliderComponent = ({slides}) => {
         if (firstProjectWithPhotosIndex === -1) {
           setProjectArray(filterNoResults);
         } else {
-          // Update the current project index if the current project has no photos after applying the filter
-          if (filteredProjects[currentProjectIndex].assets.length === 0) {
+          // it becomes undefined if the project index is past what exists post filter, the setting of project index doesn't set in fast enough
+          if (filteredProjects[currentProjectIndex]?.property === undefined){
+            setCurrentProjectIndex(0)
+            currentProjectIndexTransition = 0 
             setCurrentSlideIndex(0)
             setCurrentProjectIndex(firstProjectWithPhotosIndex);
           }
+          else if (filteredProjects[currentProjectIndex].assets.length === 0) {
+            setCurrentSlideIndex(0)
+            setCurrentProjectIndex(firstProjectWithPhotosIndex);
+          }
+          else{
+          }
         }
       }
-      setSlideArray(filteredProjects[currentProjectIndex].assets)
+      setSlideArray(filteredProjects[currentProjectIndexTransition].assets)
     }, [filterState]);
 
     useEffect(() => {
