@@ -9,7 +9,8 @@ const ImageSliderComponent = ({slides}) => {
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
     const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
     // helps filter the slides you can see (defaults to pics only)
-    const [filterState, setFilterState] = useState({"region":[], "tags":[], "people":[], "services":[], "type":["jpg"]});
+    let defaultFilterStart = {"region":[], "tags":[], "people":[], "services":[], "type":["jpg"]}
+    const [filterState, setFilterState] = useState(defaultFilterStart);
     // differentiates project and slide options
     const [projectArray, setProjectArray] = useState(slides)
     const [slideArray, setSlideArray] = useState(slides[0].assets)
@@ -140,6 +141,10 @@ const ImageSliderComponent = ({slides}) => {
         })
     }, [currentSlideIndex, currentProjectIndex, projectArray, slideArray, trendingDirection]);
 
+    const handleTotalReset = () => {
+      setFilterState(defaultFilterStart)
+    }
+
     const goToPrevious = () => {
         const isFirstSlide = currentSlideIndex === 0;
         const newIndex = isFirstSlide ? slideArray.length -1 : currentSlideIndex -1
@@ -194,6 +199,15 @@ const ImageSliderComponent = ({slides}) => {
             <div>{currentSlideIndex}</div>
             <h5>Filters: {JSON.stringify(filterState)}</h5>
             <h1>Filters</h1>
+            <button
+                onClick={() => handleTotalReset()}
+                name="total reset"
+                key='total reset'
+                value="reset"
+                className = 'filter-button'
+              >
+                RESET ALL
+              </button>
             <div className ='filterContainer'>
                 <FilterButtons data={slides} setFilter={setFilterState} filter={filterState} resetDefaults={resetDefaults} projectArray={projectArray}/>
             </div>
