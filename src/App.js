@@ -1,5 +1,5 @@
 import './App.css';
-import ImageSlider from "./ImageSlider";
+import ImageSliderComponent from "./ImageSliderComponent";
 import data from './data.json';
 
 
@@ -9,19 +9,19 @@ function App() {
   fetch('./data.json')
   .then(response => response.json())
   .then(data => {
-    console.log(data);
+    console.log('DATA', data);
   });
   
   const containerStyles = {
-    width: '500px',
-    height: '280px',
+    width: '800px',
+    height: '400px',
     margin: '0 auto',
   }
   return (
     <div className="App">
       <h1>Ariel's Test</h1>
         <div style={containerStyles}>
-          <ImageSlider slides = {data}/>
+          <ImageSliderComponent slides = {data}/>
         </div>
     </div>
   );
