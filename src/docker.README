@@ -1,0 +1,12 @@
+# docker compose
+docker-compose up
+docker-compose down
+
+# check running conta9iners
+docker ps # running container4s
+docker ps -a # containers that are stopped
+docker container prune # removes all stopped containers
+
+# docker images
+docker images
+docker image rm <image id>

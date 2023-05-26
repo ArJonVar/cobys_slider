@@ -1,0 +1,16 @@
+building new image:
+
+docker build -t my-image .
+docker run -d -p 80:80 my-image (detached)
+docker run -it -p 80:80 my-image (not detached)
+
+debug via cli
+ sudo docker exec -it 8ed5073061e3 /bin/sh
+
+checking images:
+
+sudo docker ps -a
+sudo docker stop (id)
+sudo docker remove (id)
+
+to make pictures work: you may need to change localhost:3000 to the ip of the server i.e. http://149.198.148.68/

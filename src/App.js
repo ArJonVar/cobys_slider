@@ -1,23 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+import ImageSliderComponent from "./ImageSliderComponent";
+import data from './data.json';
+
+
 
 function App() {
+  
+  fetch('./data.json')
+  .then(response => response.json())
+  .then(data => {
+    console.log('DATA', data);
+  });
+  
+  const containerStyles = {
+    width: '800px',
+    height: '400px',
+    margin: '0 auto',
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Ariel's Test</h1>
+        <div style={containerStyles}>
+          <ImageSliderComponent slides = {data}/>
+        </div>
     </div>
   );
 }
